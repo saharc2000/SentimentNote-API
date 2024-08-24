@@ -1,0 +1,7 @@
+2024-08-23 12:59:03,662 - logger - INFO - user_id: 2
+2024-08-23 12:59:03,665 - logger - INFO - notes: []
+2024-08-23 12:59:03,668 - logger - INFO - subscriptions: [<database.Subscription object at 0x000001F9010E0760>]
+2024-08-23 16:03:28,432 - logger - INFO - username: new, password: 1234
+2024-08-23 16:03:28,609 - logger - INFO - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjQ0MzA4MDh9.puKWb3-z_eosBgWH_ISKZVCrwZ6Luc1DsiMADm5xg98
+2024-08-23 18:01:59,379 - app.logger - INFO - username: bruno, password: 1234
+2024-08-23 18:01:59,530 - app.logger - INFO - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjQ0Mzc5MTl9.xjnv7E7NqUvTuAjpT0SHt0TsdFXVOjIIOnDSu2T0J-s

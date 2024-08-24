@@ -1,0 +1,44 @@
+{
+    'parameters': [
+        {
+            'name': 'body',
+            'in': 'body',
+            'description': 'User registration details',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'username': {
+                        'type': 'string',
+                        'example': 'user1'
+                    },
+                    'password': {
+                        'type': 'string',
+                        'example': 'password123'
+                    }
+                }
+            }
+        }
+    ],
+    'responses': {
+        '201': {
+            'description': 'User registered successfully',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'token': {
+                        'type': 'string',
+                        'description': 'JWT token for authentication'
+                    },
+                    'message': {
+                        'type': 'string',
+                        'description': 'Registration success message'
+                    }
+                }
+            }
+        },
+        '400': {
+            'description': 'Username already exists or bad request'
+        }
+    }
+}

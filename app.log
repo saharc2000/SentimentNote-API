@@ -1,0 +1,8 @@
+2024-08-23 18:45:34,041 - app.logger - INFO - username: bruno, password: 1234
+2024-08-23 18:45:34,239 - app.logger - INFO - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MjQ0NDA1MzR9.fGuxgmg81T1WTXzE8RmnhELGYAjwitvlGq41nIz39gU
+2024-08-23 18:56:22,664 - app.logger - INFO - username: newbe, password: 1234
+2024-08-23 18:56:22,835 - app.logger - INFO - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3MjQ0NDExODJ9.db6oBLbis1SY05_UT9O6rPo_Giv4X0DZJT8WVYBaWgI
+2024-08-23 22:49:49,741 - app.logger - INFO - username: newUSER, password: password123
+2024-08-23 22:49:49,918 - app.logger - INFO - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjQ0NTUxODl9.FrGXjxG-hYFj2wYHRCbBgx_wtoM_7jgHxUV_0GGE7gc
+2024-08-23 22:53:36,778 - app.logger - INFO - username: user1, password: password123
+2024-08-23 22:53:36,931 - app.logger - INFO - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjQ0NTU0MTZ9.IwxzfK4c6IQA_BOZyeOdvrDOkGL0n-3gESgOIf7vOVM

@@ -18,7 +18,10 @@ class Note(Base):
     title = Column(String, nullable=False)
     body = Column(String, nullable=False)
     created_at = Column(String, nullable=False)
-    sentiment = Column(String)
+    score_tag = Column(String)
+    agreement = Column(String)
+    subjectivity = Column(String)
+    confidence = Column(String)
     user = relationship('User', back_populates='notes')
 
 class Subscription(Base):
@@ -65,9 +68,18 @@ class DatabaseManager:
         session.close()
         return user
 
-    def add_note(self, user_id, title, body, created_at, sentiment):
+    def add_note(self, user_id, title, body, created_at, score_tag, agreement, subjectivity, confidence):
         session = self.get_session()
-        note = Note(user_id=user_id, title=title, body=body, created_at=created_at, sentiment=sentiment)
+        note = Note(
+            user_id=user_id,
+            title=title,
+            body=body,
+            created_at=created_at,
+            score_tag=score_tag,
+            agreement=agreement,
+            subjectivity=subjectivity,
+            confidence=confidence
+        )
         session.add(note)
         session.commit()
         note_id = note.id
@@ -83,6 +95,12 @@ class DatabaseManager:
     def get_note(self, note_id):
         session = self.get_session()
         note = session.query(Note).filter_by(id=note_id).first()
+        session.close()
+        return note
+    
+    def get_last_note(self, user_id):
+        session = self.get_session()
+        note = session.query(Note).filter_by(user_id=user_id).order_by(Note.created_at.desc()).first()
         session.close()
         return note
 

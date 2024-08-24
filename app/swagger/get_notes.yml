@@ -40,9 +40,18 @@ responses:
             type: string
             format: date-time
             description: Timestamp when the note was created
-          sentiment:
+          score_tag:
             type: string
-            description: Sentiment analysis result of the note
+            description: Polarity of the element
+          agreement:
+            type: string
+            description: Marks the agreement between the sentiments detected in the text.
+          subjectivity:
+            type: string
+            description: Marks the subjectivity of the text.
+          confidence:
+            type: string
+            description: represents the confidence associated with the sentiment analysis performed on the text.
   401:
     description: Unauthorized - Authentication required or invalid token
     schema:

@@ -16,14 +16,6 @@ def create_app():
     db_manager.init_db()
     auth = Auth(config, db_manager)
     
-
-# app = Flask(__name__)
-# swagger = Swagger(app)
-# config = Config()
-# db_manager = DatabaseManager(config)
-# db_manager.init_db()
-# auth = Auth(config, db_manager)
-
     def analyze_sentiment(text):
         url = 'https://api.meaningcloud.com/sentiment-2.1'
         params = {
@@ -33,8 +25,14 @@ def create_app():
             'model': 'general'
         }
         response = requests.get(url, params=params)
+        response_data = response.json()
         logger.info(f'response: {response.json()}')
-        return response.json()['score_tag']
+        score_tag = response_data['score_tag']
+        agreement = response_data['agreement']
+        subjectivity = response_data['subjectivity']
+        confidence = response_data['confidence']
+        
+        return score_tag, agreement, subjectivity, confidence
 
 
     # User registration
@@ -75,9 +73,24 @@ def create_app():
         user = db_manager.get_user_by_id(user_id)
         if not user:
             abort(404, 'User not found')
-
-        return jsonify({'username': user.username, 'message': 'User logged in successfully'})
-
+        last_note = db_manager.get_last_note(user_id)
+        response = {
+            'id': user.id,
+            'username': user.username,
+        }
+        if last_note:
+            response.update({
+                'id': last_note.id,
+                'title': last_note.title,
+                'body': last_note.body,
+                'created_at': last_note.created_at,
+                'score_tag': last_note.score_tag,
+                'agreement': last_note.agreement,
+                'subjectivity': last_note.subjectivity,
+                'confidence': last_note.confidence
+            })
+        return jsonify(response)
+    
     @app.route('/notes', methods=['POST'])
     @swag_from('swagger/create_note.yml')
     def create_note():
@@ -87,12 +100,20 @@ def create_app():
         title = data['title']
         body = data['body']
         created_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        sentiment = analyze_sentiment(body)
+        score_tag, agreement, subjectivity, confidence = analyze_sentiment(body)
 
-        note_id = db_manager.add_note(user_id, title, body, created_at, sentiment)
-
-        return jsonify({'id': note_id, 'title': title, 'body': body, 'created_at': created_at, 'sentiment': sentiment}), 201
-
+        note_id = db_manager.add_note(user_id, title, body, created_at, score_tag, agreement, subjectivity, confidence)
+        return jsonify({
+            'id': note_id,
+            'title': title,
+            'body': body,
+            'created_at': created_at,
+            'score_tag': score_tag,
+            'agreement': agreement,
+            'subjectivity': subjectivity,
+            'confidence': confidence
+        }), 201
+    
     @app.route('/notes', methods=['GET'])
     @swag_from('swagger/get_notes.yml')
     def get_notes():
@@ -107,7 +128,10 @@ def create_app():
             'title': note.title,
             'body': note.body,
             'created_at': note.created_at,
-            'sentiment': note.sentiment
+            'score_tag': note.score_tag,
+            'agreement': note.agreement,
+            'subjectivity': note.subjectivity,
+            'confidence': note.confidence
         } for note in notes])
 
     @app.route('/notes/<int:note_id>', methods=['GET'])
@@ -128,7 +152,10 @@ def create_app():
             'title': note.title,
             'body': note.body,
             'created_at': note.created_at,
-            'sentiment': note.sentiment
+            'score_tag': note.score_tag,
+            'agreement': note.agreement,
+            'subjectivity': note.subjectivity,
+            'confidence': note.confidence
         })
 
     @app.route('/users', methods=['GET'])
@@ -144,6 +171,11 @@ def create_app():
     def subscribe_to_user(user_id):
         token = request.headers.get('Authorization')
         subscriber_id = auth.authenticate(token)
+        if(user_id == subscriber_id):
+            abort(400, 'You cannot subscribe to yourself')
+        user = db_manager.get_user_by_id(user_id)
+        if not user:
+            abort(404, 'User not found')
         subscription = db_manager.get_subscription(subscriber_id, user_id)
         if subscription:
             abort(400, 'You are already subscribed to this user')

@@ -43,6 +43,15 @@ responses:
         error:
           type: string
           description: Description of the error
+  404: 
+    description: User not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
+
 components:
   securitySchemes:
     BearerAuth:

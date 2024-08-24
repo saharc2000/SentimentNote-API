@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: Notes API
+  description: API for managing notes with sentiment analysis.
+  version: 1.0.0
+
+paths:
+  /notes:
+post:
+summary: Create Note
+description: Create a note with sentiment analysis.
+security:
+  - BearerAuth: []
+parameters:
+  - name: Authorization
+    in: header
+    required: true
+    schema:
+      type: string
+      description: Bearer token for authentication
+      example: '<your_token>'
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+responses:
+  201:
+    description: Note created successfully with sentiment analysis
+    content:
+    application/json:
+    schema:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the note
+        title:
+          type: string
+          description: Title of the note
+        body:
+          type: string
+          description: Body of the note
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the note was created
+        sentiment:
+          type: string
+          description: Sentiment analysis result of the note
+      required:
+        - id
+        - title
+        - body
+        - created_at
+        - sentiment
+  400:
+    description: Bad Request - Invalid note title or body
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
+  401:
+    description: Unauthorized - Authentication required or invalid token
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
+  500:
+    description: Internal Server Error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: Notes API
+  description: API for managing notes with sentiment analysis.
+  version: 1.0.0
+
+paths:
+  /subscribe/{user_id}:
+get:
+summary: subscribe
+description: subscribe to a user to get their notes
+security:
+  - BearerAuth: []
+parameters:
+  - name: user_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      description: Unique identifier for the note
+      example: 1
+  - name: Authorization
+    in: header
+    required: true
+    schema:
+      type: string
+      description: Bearer token for authentication
+      example: '<your_token>'
+responses:
+  200:
+    description: subscription success
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Subscribed successfully
+  401:
+    description: Unauthorized - Authentication required or invalid token
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

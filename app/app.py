@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, abort
 from flasgger import Swagger, swag_from
+from flask_swagger_ui import get_swaggerui_blueprint
 from .config import Config  # Use relative import
 from .database import DatabaseManager  # Use relative import
 from .auth import Auth  # Use relative import
@@ -15,6 +16,7 @@ def create_app():
     db_manager.init_db()
     auth = Auth(config, db_manager)
     
+
 # app = Flask(__name__)
 # swagger = Swagger(app)
 # config = Config()
@@ -66,6 +68,7 @@ def create_app():
         return jsonify({'token': token})
 
     @app.route('/auth/profile', methods=['GET'])
+    @swag_from('swagger\proflie.yml')
     def get_user_profile():
         token = request.headers.get('Authorization')
         user_id = auth.authenticate(token)
@@ -76,6 +79,7 @@ def create_app():
         return jsonify({'username': user.username, 'message': 'User logged in successfully'})
 
     @app.route('/notes', methods=['POST'])
+    @swag_from('swagger/create_note.yml')
     def create_note():
         token = request.headers.get('Authorization')
         user_id = auth.authenticate(token)
@@ -87,9 +91,10 @@ def create_app():
 
         note_id = db_manager.add_note(user_id, title, body, created_at, sentiment)
 
-        return jsonify({'id': note_id, 'title': title, 'body': body, 'created_at': created_at, 'sentiment': sentiment})
+        return jsonify({'id': note_id, 'title': title, 'body': body, 'created_at': created_at, 'sentiment': sentiment}), 201
 
     @app.route('/notes', methods=['GET'])
+    @swag_from('swagger/get_notes.yml')
     def get_notes():
         token = request.headers.get('Authorization')
         user_id = auth.authenticate(token)
@@ -106,6 +111,7 @@ def create_app():
         } for note in notes])
 
     @app.route('/notes/<int:note_id>', methods=['GET'])
+    @swag_from('swagger/get_note_by_id.yml')
     def get_note(note_id):
         token = request.headers.get('Authorization')
         user_id = auth.authenticate(token)
@@ -126,11 +132,15 @@ def create_app():
         })
 
     @app.route('/users', methods=['GET'])
+    @swag_from('swagger/users.yml')
     def get_users():
+        token = request.headers.get('Authorization')
+        auth.authenticate(token)
         users = db_manager.get_all_users()
         return jsonify([{'id': user.id, 'username': user.username} for user in users])
 
     @app.route('/subscribe/<int:user_id>', methods=['POST'])
+    @swag_from('swagger/subscribe.yml')
     def subscribe_to_user(user_id):
         token = request.headers.get('Authorization')
         subscriber_id = auth.authenticate(token)
@@ -141,6 +151,7 @@ def create_app():
         db_manager.add_subscription(subscriber_id, user_id)
 
         return jsonify({'message': 'Subscribed successfully'})
+    
     return app, db_manager
 
 if __name__ == '__main__':

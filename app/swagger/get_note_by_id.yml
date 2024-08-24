@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: Notes API
+  description: API for managing notes with sentiment analysis.
+  version: 1.0.0
+
+paths:
+  /notes/{note_id}:
+get:
+summary: Get Notes
+description: Get all authorized notes with sentiment analysis.
+security:
+  - BearerAuth: []
+parameters:
+  - name: note_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      description: Unique identifier for the note
+      example: 1
+  - name: Authorization
+    in: header
+    required: true
+    schema:
+      type: string
+      description: Bearer token for authentication
+      example: '<your_token>'
+      parameters:
+
+responses:
+  200:
+    description: List of all notes
+    schema:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the note
+        title:
+          type: string
+          description: Title of the note
+        body:
+          type: string
+          description: Body of the note
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the note was created
+        sentiment:
+          type: string
+          description: Sentiment analysis result of the note
+  401:
+    description: Unauthorized - Authentication required or invalid token
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

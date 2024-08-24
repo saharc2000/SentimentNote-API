@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: Notes API
+  description: API for managing notes with sentiment analysis.
+  version: 1.0.0
+
+paths:
+  /users:
+get:
+summary: Get Users
+description: Get all users.
+security:
+  - BearerAuth: []
+parameters:
+  - name: Authorization
+    in: header
+    required: true
+    schema:
+      type: string
+      description: Bearer token for authentication
+      example: '<your_token>'
+responses:
+  200:
+    description: List of all users
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Unique identifier for the user
+          username:
+            type: string
+            description: Username of the user
+  500:
+    description: Internal Server Error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
+
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

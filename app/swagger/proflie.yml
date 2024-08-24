@@ -5,24 +5,23 @@ info:
   version: 1.0.0
 
 paths:
-  /auth/login:
-post:
-summary: Log in
-description: Log in to the system and obtain a JWT token for authentication.
+  /auth/profile:
+get:
+summary: Retreive Profile
+description: Retreive the profile of the user.
+security:
+  - BearerAuth: []
 parameters:
-  - name: body
-    in: body
+  - name: Authorization
+    in: header
     required: true
     schema:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
+      type: string
+      description: Bearer token for authentication
+      example: '<your_token>'
 responses:
   200:
-    description: User logged in successfully and token provided
+    description: Profile retreived successfully
     schema:
       type: object
       properties:
@@ -32,16 +31,8 @@ responses:
         message:
           type: string
           description: Login success message
-  400:
-    description: Bad Request - Invalid username or password
-    schema:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Description of the error
-  500:
-    description: Internal Server Error
+  401:
+    description: Unauthorized - Authentication required or invalid token
     schema:
       type: object
       properties:

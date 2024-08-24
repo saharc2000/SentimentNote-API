@@ -41,6 +41,6 @@ class Auth:
             payload = jwt.decode(token, self.config.SECRET_KEY, algorithms=['HS256'])
             return payload['user_id']
         except jwt.ExpiredSignatureError:
-            return None
+            return "Token expired. Please log in again."
         except jwt.InvalidTokenError:
-            return None
+            return "Invalid token. Please log in again."

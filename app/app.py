@@ -1,39 +1,23 @@
 from flask import Flask, request, jsonify, abort
 from flasgger import Swagger, swag_from
-from flask_swagger_ui import get_swaggerui_blueprint
-from .config import Config  # Use relative import
-from .database import DatabaseManager  # Use relative import
-from .auth import Auth  # Use relative import
-from .logger import logger  # Use relative import
+from .config import Config, TestConfig
+from .database import DatabaseManager  
+from .auth import Auth  
+from .logger import logger  
+from .sentiment_service import SentimentService
 import requests
 from datetime import datetime
 
-def create_app():
+def create_app(test=False):
     app = Flask(__name__)
     swagger = Swagger(app)
     config = Config()
+    if test:    
+        config = TestConfig()
     db_manager = DatabaseManager(config)
     db_manager.init_db()
     auth = Auth(config, db_manager)
-    
-    def analyze_sentiment(text):
-        url = 'https://api.meaningcloud.com/sentiment-2.1'
-        params = {
-            'key': config.MEANINGCLOUD_API_KEY,
-            'txt': text,
-            'lang': 'en',
-            'model': 'general'
-        }
-        response = requests.get(url, params=params)
-        response_data = response.json()
-        logger.info(f'response: {response.json()}')
-        score_tag = response_data['score_tag']
-        agreement = response_data['agreement']
-        subjectivity = response_data['subjectivity']
-        confidence = response_data['confidence']
-        
-        return score_tag, agreement, subjectivity, confidence
-
+    sentiment_service = SentimentService(config.MEANINGCLOUD_API_KEY)
 
     # User registration
     @app.route('/auth/register', methods=['POST'])
@@ -59,6 +43,7 @@ def create_app():
         data = request.get_json()
         username = data['username']
         password = data['password']
+        logger.info(f'username: {username}, password: {password}')
         token = auth.login_user(username, password)
         if not token:
             abort(401, 'Invalid username or password')
@@ -71,6 +56,7 @@ def create_app():
         token = request.headers.get('Authorization')
         user_id = auth.authenticate(token)
         user = db_manager.get_user_by_id(user_id)
+        logger.info(f'user_id: {user_id}')
         if not user:
             abort(404, 'User not found')
         last_note = db_manager.get_last_note(user_id)
@@ -99,19 +85,16 @@ def create_app():
         data = request.get_json()
         title = data['title']
         body = data['body']
+        logger.info(f'title: {title}, body: {body}')
         created_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        score_tag, agreement, subjectivity, confidence = analyze_sentiment(body)
-
-        note_id = db_manager.add_note(user_id, title, body, created_at, score_tag, agreement, subjectivity, confidence)
+        sentiment_data = sentiment_service.analyze(body)
+        note_id = db_manager.add_note(user_id, title, body, created_at, **sentiment_data)
         return jsonify({
             'id': note_id,
             'title': title,
             'body': body,
             'created_at': created_at,
-            'score_tag': score_tag,
-            'agreement': agreement,
-            'subjectivity': subjectivity,
-            'confidence': confidence
+            **sentiment_data
         }), 201
     
     @app.route('/notes', methods=['GET'])
@@ -140,7 +123,6 @@ def create_app():
         token = request.headers.get('Authorization')
         user_id = auth.authenticate(token)
         note = db_manager.get_note(note_id)
-
         if not note:
             abort(404, 'Note not found')
         subscription = db_manager.get_user_subscriptions(user_id)

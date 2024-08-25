@@ -12,23 +12,11 @@ class AppTestCase(unittest.TestCase):
     
     def setUp(self):
         # Create the app using the test configuration
-        self.app, self.db_manager = create_app()
+        self.app, self.db_manager = create_app(test=True)
         self.client = self.app.test_client()
-        # self.app_context = self.app.app_context()
-        # self.app_context.push()
-        # self.db_manager = self.app.db_manager
-        # self.auth = self.app.auth
-
-        # # Initialize database
-        # self.db_manager.__init__(Config())
-        # self.db_manager.init_db()
-
-        # # Create a test user and get a token
-        # self.token = self._register_and_login_user()
 
     def tearDown(self):
         self.db_manager.drop_db()
-    #     self.app_context.pop()
 
     def test_register_user(self):
         response = self.client.post('/auth/register', json={

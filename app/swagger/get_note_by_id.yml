@@ -67,23 +67,23 @@ responses:
         error:
           type: string
           description: Description of the error
-    403:
-      description: Forbidden - User does not have access to this note
-      schema:
-        type: object
-        properties:
-          error:
-            type: string
-            description: Description of the error
+  403:
+    description: Forbidden - User does not have access to this note
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
 
-    404: 
-      description: Note not found
-      schema:
-        type: object
-        properties:
-          error:
-            type: string
-            description: Description of the error
+  404: 
+    description: Note not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
 components:
   securitySchemes:
     BearerAuth:

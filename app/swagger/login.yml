@@ -40,6 +40,14 @@ responses:
         error:
           type: string
           description: Description of the error
+  404:
+    description: Not Found - User not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Description of the error
   500:
     description: Internal Server Error
     schema:

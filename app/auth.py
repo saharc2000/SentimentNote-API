@@ -38,10 +38,10 @@ class Auth:
 
     def decode_jwt(self, token):
         try:
-            payload = jwt.decode(token, self.config.SECRET_KEY, algorithms=['HS256'])
+            payload = jwt.decode(token, self.config.SECRET_KEY, algorithms=self.config.ALGORITHM)
             return payload['user_id']
         except jwt.ExpiredSignatureError:
-            return "Token expired. Please log in again."
+            abort(401, 'Token has expired. Please log in again.')
         except jwt.InvalidTokenError:
-            return "Invalid token. Please log in again."
+            abort (401, 'Invalid token. Please log in again.')
 

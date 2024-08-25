@@ -25,4 +25,12 @@ JWT tokens are used for authentication.
    git clone https://github.com/yourusername/notes-api.git
    cd notes-api
 
-   python app.app.py
+2. **Running the Application:**
+   python -m app.app
+
+3. **API Documentation**
+The API uses Swagger for documentation.
+Access the Swagger documentation: Visit http://127.0.0.1:3500/apidocs/ in your browser to see the interactive API documentation.
+
+4. **Run Unit Tests:**:
+   python -m unittest discover

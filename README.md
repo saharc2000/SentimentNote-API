@@ -22,8 +22,8 @@ JWT tokens are used for authentication.
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/notes-api.git
-   cd notes-api
+   git clone https://github.com/yourusername/BigVU_Task.git
+   cd BigVU_Task
 
 2. **Running the Application:**
    python -m app.app

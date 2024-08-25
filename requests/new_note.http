@@ -1,8 +1,0 @@
-GET http://127.0.0.1:3500/auth/profile
-# Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoZWxsbyIsImV4cCI6MTcyNDI0ODcyNn0.Y0_CcaBKlOPxVB0zibN6QxlBtHuU0e90mIK3DBTyWx0.eyJzdWIiOiJoZWxsbyIsImV4cCI6MTcyNDE5MDQxMn0.aIHNhgX7zWCN4i1e-Fx8IX1bZzys3uZ32HvGx42NYMA
-
-# {
-#     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoZWxsbyIsImV4cCI6MTcyNDI0ODcyNn0.Y0_CcaBKlOPxVB0zibN6QxlBtHuU0e90mIK3DBTyWx0.eyJzdWIiOiJoZWxsbyIsImV4cCI6MTcyNDE5MDQxMn0.aIHNhgX7zWCN4i1e-Fx8IX1bZzys3uZ32HvGx42NYMA",
-#     "token_type": "Bearer"
-# }

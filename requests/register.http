@@ -1,7 +1,0 @@
-POST http://127.0.0.1:3500/auth/register
-Content-Type: application/json
-
-{
-    "username": "KingSahar",
-    "password": "1234"
-}

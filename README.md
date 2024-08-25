@@ -34,3 +34,6 @@ Access the Swagger documentation: Visit http://127.0.0.1:3500/apidocs/ in your b
 
 4. **Run Unit Tests:**:
    python -m unittest discover
+
+Make sure to replace the placeholder section `yourusername` in the repository URL with the appropriate value.
+
